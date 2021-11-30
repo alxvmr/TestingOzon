@@ -13,14 +13,14 @@ namespace OzonTest
     public class Tests
     {
         IWebDriver driver;
-
+        public static String BASE_URL = "https://www.ozon.ru/";
         [SetUp]
         public void Setup()
         {
             driver = new ChromeDriver();
             driver.Manage().Window.Maximize();
             driver.Manage().Timeouts().ImplicitWait = System.TimeSpan.FromSeconds(7);
-            driver.Navigate().GoToUrl("https://www.ozon.ru/");
+            driver.Navigate().GoToUrl(BASE_URL);
         }
 
         [Test]
@@ -30,7 +30,6 @@ namespace OzonTest
             driver.FindElement(By.XPath("//*[@href = '/category/smartfony-15502/']")).Click();
             driver.FindElement(By.XPath("//div[contains(@class, 'ui-y4 ui-y7') and contains (.//p, 'от')]//input")).SendKeys(Keys.Control + Keys.Backspace);
             driver.FindElement(By.XPath("//div[contains(@class, 'ui-y4 ui-y7') and contains (.//p, 'от')]//input")).SendKeys("30000");
-            driver.FindElement(By.XPath("//div[contains(@class, 'ui-y4 ui-y7') and contains (.//p, 'от')]//input")).SendKeys(Keys.Enter);
             driver.FindElement(By.XPath("//div[contains(@class, 'ui-y4 ui-y7') and contains (.//p, 'до')]//input")).SendKeys(Keys.Control + Keys.Backspace);
             driver.FindElement(By.XPath("//div[contains(@class, 'ui-y4 ui-y7') and contains (.//p, 'до')]//input")).SendKeys("100000");
             driver.FindElement(By.XPath("//div[contains(@class, 'ui-y4 ui-y7') and contains (.//p, 'до')]//input")).SendKeys(Keys.Enter);
@@ -72,13 +71,11 @@ namespace OzonTest
         public void NegativeSignUpTest()
         {
             driver.FindElement(By.XPath("//div[@data-widget='loginButton']")).Click();
+            driver.SwitchTo().Frame("authFrame");
             driver.FindElement(By.XPath("//button[@type='submit']")).Click();
-            /*Actions actions = new Actions(driver);
-            actions.MoveToElement(element).Click();
-            actions.Perform();*/
-            //driver.FindElement(By.XPath("//button[@type='submit']")).Click();
-            //Assert.IsFalse(driver.FindElements(By.XPath("//p[@class='ui-p2' and contains(text(), 'Заполните телефон')]")).Any(),
-            //   "Phone number confirmation button is enabel when phone number input has no value.");
+            driver.FindElement(By.XPath("//button[@type='submit']")).Click();
+            Assert.IsTrue(driver.FindElements(By.XPath("//p[@class='ui-p2' and contains(text(), 'Заполните телефон')]")).Any(),
+               "Phone number confirmation button is enabel when phone number input has no value.");
         }
 
 
